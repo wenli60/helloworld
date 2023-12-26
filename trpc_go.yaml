@@ -28,6 +28,8 @@ client:  # 客户端调用的后端配置
   filter:  # 针对所有后端调用函数前后的拦截器列表
     - simpledebuglog
   service:  # 针对单个后端的配置
+    - name: trpc.mysql.test.helloworld # 初始化为mysql
+      target: dsn://root:MCXhp!5634ku@tcp(9.134.39.43:3306)/sfee_commonsrv?charset=utf8mb4&parseTime=True
     - name: trpc.test.helloworld.Greeter  # 后端服务的 service name
       namespace: Development  # 后端服务的环境
       network: tcp  # 后端服务的网络类型 tcp udp 配置优先

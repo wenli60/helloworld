@@ -10,7 +10,7 @@ var dbConn *gorm.DB
 // Setup 初始化数据库连接
 func Setup() error {
 	var err error
-	dbConn, err = tgorm.NewClientProxy("trpc.mysql.tyoffice.notification")
+	dbConn, err = tgorm.NewClientProxy("trpc.mysql.test.helloworld")
 	if err != nil {
 		return err
 	}
