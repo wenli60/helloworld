@@ -10,6 +10,7 @@ require (
 	git.code.oa.com/trpc-go/trpc-filter/recovery v0.1.4
 	git.code.oa.com/trpc-go/trpc-go v0.16.0
 	git.woa.com/trpcprotocol/test/helloworld v0.0.0-00010101000000-000000000000
+	github.com/go-gormigrate/gormigrate/v2 v2.1.1 // indirect
 	github.com/golang/mock v1.6.0
 	gorm.io/gorm v1.25.5
 )

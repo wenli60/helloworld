@@ -1,11 +1,9 @@
 package models
 
-import (
-	"gorm.io/gorm"
-)
+import "gorm.io/gorm"
 
-// ApiApply xx
-type ApiApply struct {
+// ApiApplies xx
+type ApiApplies struct {
 	gorm.Model
 	Appid             string `gorm:"type:varchar(16);comment:系统缩写;not null;" json:"app_id"`
 	Appkey            string `gorm:"type:varchar(32);not null;comment:密钥" json:"app_key"`

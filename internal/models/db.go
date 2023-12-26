@@ -14,6 +14,10 @@ func Setup() error {
 	if err != nil {
 		return err
 	}
+	err = autoMigrate()
+	if err != nil {
+		return err
+	}
 	return nil
 }
 
