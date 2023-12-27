@@ -1,6 +1,8 @@
 package models
 
-import "gorm.io/gorm"
+import (
+	"gorm.io/gorm"
+)
 
 // ApiApplies xx
 type ApiApplies struct {
@@ -12,4 +14,15 @@ type ApiApplies struct {
 	PlatformDeveloper string `gorm:"type:varchar(32); null;comment:对方平台地址" json:"platform_developer"`
 	Status            int    `gorm:"type:int(1);not null;default:0;comment:状态" json:"status"`
 	ApplyReason       string `gorm:"type:varchar(512);comment:申请理由" json:"apply_reason"`
+}
+
+func CheckAuth(appid, appkey string) bool {
+	var apiApplies ApiApplies
+	_ = GetDBConn().Where("`appid` = ? and appkey=", appid, appkey).Last(&apiApplies).Error
+
+	if apiApplies.ID > 0 {
+		return true
+	}
+
+	return false
 }
