@@ -2,15 +2,16 @@ package util
 
 import (
 	"errors"
-	"github.com/dgrijalva/jwt-go"
 	"time"
+
+	"github.com/dgrijalva/jwt-go"
 )
 
 var jwtSecret []byte
 
 type Claims struct {
-	Username string `json:"username"`
-	Password string `json:"password"`
+	Appid  string `json:"appid"`
+	Appkey string `json:"appkey"`
 	jwt.StandardClaims
 }
 
