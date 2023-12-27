@@ -14,6 +14,7 @@ service Greeter {
 // 请求参数
 message HelloRequest {
   string msg = 1;
+  string token = 2;
 }
 
 // 响应参数

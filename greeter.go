@@ -14,7 +14,7 @@ type greeterImpl struct {
 func (s *greeterImpl) SayHello(ctx context.Context, req *pb.HelloRequest) (*pb.HelloReply, error) {
 	//鉴权
 	rsp := &pb.HelloReply{}
-	tokenClaims, err := util.Auth("")
+	tokenClaims, err := util.Auth(req.Token)
 	if err != nil {
 		rsp.Msg = err.Error()
 		return rsp, nil
