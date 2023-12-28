@@ -18,7 +18,7 @@ type ApiApplies struct {
 
 func CheckAuth(appid, appkey string) bool {
 	var apiApplies ApiApplies
-	_ = GetDBConn().Where("`appid` = ? and appkey=", appid, appkey).Last(&apiApplies).Error
+	_ = GetDBConn().Where("`appid` = ? and appkey= ?", appid, appkey).Last(&apiApplies).Error
 
 	if apiApplies.ID > 0 {
 		return true

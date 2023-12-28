@@ -2,61 +2,58 @@ package util
 
 import (
 	"errors"
-	"time"
-
+	"git.woa.com/test/helloworld/internal/models"
 	"github.com/dgrijalva/jwt-go"
+	"time"
 )
 
-var jwtSecret []byte
-
-type Claims struct {
+type JwtPayLoad struct {
 	Appid  string `json:"appid"`
 	Appkey string `json:"appkey"`
+}
+
+const secretKey = "dddddd"
+
+type CustomClaims struct {
+	JwtPayLoad
 	jwt.StandardClaims
 }
 
-// GenerateToken generate tokens used for auth
-func GenerateToken(appid, appkey string) (string, error) {
-	nowTime := time.Now()
-	expireTime := nowTime.Add(3 * time.Hour)
-
-	claims := Claims{
-		EncodeMD5(appid),
-		EncodeMD5(appkey),
+func GenToken(user JwtPayLoad) (string, error) {
+	var secretKey = []byte(secretKey)
+	claims := CustomClaims{
+		user,
 		jwt.StandardClaims{
-			ExpiresAt: expireTime.Unix(),
-			Issuer:    "gin-blog",
+			ExpiresAt: time.Now().Add(1 * time.Hour).Unix(), // 过期时间
+			Issuer:    "wenli",
 		},
 	}
-
-	tokenClaims := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	token, err := tokenClaims.SignedString(jwtSecret)
-
-	return token, err
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	return token.SignedString(secretKey)
 }
 
-func Auth(token string) (*Claims, error) {
-	if token == "" {
-		return nil, errors.New("token 不能为空")
-	}
-	tokenClaims, err := ParseToken(token)
-	if err != nil {
-		return nil, errors.New("token 解析失败")
-	}
-	return tokenClaims, nil
-}
-
-// ParseToken parsing token
-func ParseToken(token string) (*Claims, error) {
-	tokenClaims, err := jwt.ParseWithClaims(token, &Claims{}, func(token *jwt.Token) (interface{}, error) {
-		return jwtSecret, nil
+func ParseToken(tokenStr string) (*CustomClaims, error) {
+	var secretKey = []byte(secretKey)
+	token, err := jwt.ParseWithClaims(tokenStr, &CustomClaims{}, func(token *jwt.Token) (interface{}, error) {
+		return secretKey, nil
 	})
-
-	if tokenClaims != nil {
-		if claims, ok := tokenClaims.Claims.(*Claims); ok && tokenClaims.Valid {
-			return claims, nil
-		}
+	if err != nil {
+		return nil, err
 	}
+	if claims, ok := token.Claims.(*CustomClaims); ok && token.Valid {
+		return claims, nil
+	}
+	return nil, errors.New("invalid token")
+}
 
-	return nil, err
+func Auth(tokenStr string) error {
+	user, err := ParseToken(tokenStr)
+	if err != nil {
+		return err
+	}
+	exist := models.CheckAuth(user.JwtPayLoad.Appid, user.JwtPayLoad.Appkey)
+	if exist {
+		return nil
+	}
+	return errors.New(user.JwtPayLoad.Appid + "查不到对应的appid" + user.JwtPayLoad.Appkey)
 }
