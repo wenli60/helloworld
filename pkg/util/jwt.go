@@ -24,7 +24,7 @@ func GenToken(user JwtPayLoad) (string, error) {
 	claims := CustomClaims{
 		user,
 		jwt.StandardClaims{
-			ExpiresAt: time.Now().Add(1 * time.Hour).Unix(), // 过期时间
+			ExpiresAt: time.Now().Add(1 * time.Second).Unix(), // 过期时间
 			Issuer:    "wenli",
 		},
 	}
